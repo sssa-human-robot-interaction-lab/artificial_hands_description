@@ -1,21 +1,20 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro" name="mia_hand_on_ur5">
 
-  <!-- Make use of UR macro -->
-  <xacro:include filename="$(find ur_description)/urdf/inc/ur_macro.xacro"/>
+  <!-- Make use of Mia Hand on UR macro -->
+  <xacro:include filename="$(find artificial_hands_description)/urdf/mia_hand_on_ur.urdf.xacro"/>
 
-  <!-- Instantiate the UR robot and pass it all the required arguments. -->
-  <xacro:ur_robot
-    prefix=""
-    joint_limits_parameters_file="$(arg joint_limit_params)"
-    kinematics_parameters_file="$(arg kinematics_params)"
-    physical_parameters_file="$(arg physical_params)"
-    visual_parameters_file="$(arg visual_params)"
-    transmission_hw_interface="$(arg transmission_hw_interface)"
-    safety_limits="$(arg safety_limits)"
-    safety_pos_margin="$(arg safety_pos_margin)"
-    safety_k_position="$(arg safety_k_position)"
-  />
+  <xacro:mia_hand_on_ur
+      prefix=""
+      joint_limits_parameters_file="$(arg joint_limit_params)"
+      kinematics_parameters_file="$(arg kinematics_params)"
+      physical_parameters_file="$(arg physical_params)"
+      visual_parameters_file="$(arg visual_params)"
+      transmission_hw_interface="$(arg transmission_hw_interface)"
+      safety_limits="$(arg safety_limits)"
+      safety_pos_margin="$(arg safety_pos_margin)"
+      safety_k_position="$(arg safety_k_position)"
+    />
 
   <!-- Arm base -->
   <xacro:include filename="$(find artificial_hands_description)/urdf/arm_base.urdf.xacro" />
@@ -26,32 +25,5 @@
     <child link="base_link"/>
     <origin xyz="0 0 0.6" rpy="0 0 0"/>
   </joint>
-
-  <!-- OnRobot HEX-E v2-->
-  <xacro:include filename="$(find artificial_hands_description)/urdf/onrobot_hex_e.urdf.xacro" />
-
-  <!-- Attach HEX sensor -->
-  <joint name="hex_mounting_joint" type="fixed">
-      <origin xyz="0 0 0" rpy="0 0 0"/> 
-      <parent link="tool0" />
-      <child link="hex_mounting_plate" />
-  </joint>
-
-  <!-- Mia hand on UR flange -->
-  <xacro:include filename="$(find artificial_hands_description)/urdf/mia_hand_on_ur_flange.urdf.xacro" />
-
-  <!-- Attach Mia hand  -->
-  <joint name="mia_fix" type="fixed">
-    <origin xyz="0 0 0.0225" rpy="${pi/2} 0 ${pi/2}"/>
-    <parent link="hex_ee_mounting_plate"/>
-    <child link="palm"/>
-  </joint>  
-  
-  <!-- Instantiate the Mia hand Gazebo robot and pass it all the required arguments. -->
-  <xacro:include filename="$(find mia_hand_description)/urdf/mia_hand_gazebo.urdf.xacro" />
-
-  <xacro:mia_gazebo 
-    robotNamespace=""
-  />
 
 </robot>
